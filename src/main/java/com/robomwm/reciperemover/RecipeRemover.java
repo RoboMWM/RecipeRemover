@@ -5,7 +5,6 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -22,7 +21,6 @@ public class RecipeRemover extends JavaPlugin
 
     public void onEnable()
     {
-        saveConfig();
         if (getServer().getOnlinePlayers().size() > 0)
         {
             getLogger().warning("Recipes may only be removed on server start, or when no players are present on the server!");
@@ -34,6 +32,7 @@ public class RecipeRemover extends JavaPlugin
         defaultMaterials.add("HOPPER");
         getConfig().addDefault("vanillaResultsToRemove", defaultMaterials);
         getConfig().options().copyDefaults(true);
+        saveConfig();
 
         if (getConfig().getStringList("vanillaResultsToRemove").isEmpty())
             return;
