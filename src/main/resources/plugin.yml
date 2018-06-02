@@ -5,3 +5,4 @@ website: http://robomwm.com
 author: RoboMWM
 main: com.robomwm.reciperemover.RecipeRemover
 loadbefore: [CustomItemRecipes, Slimefun]
+softdepend: [Multiverse-Core]

@@ -18,7 +18,6 @@ import java.util.Set;
  */
 public class RecipeRemover extends JavaPlugin
 {
-
     public void onEnable()
     {
         if (getServer().getOnlinePlayers().size() > 0)
