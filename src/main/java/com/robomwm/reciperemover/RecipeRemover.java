@@ -24,10 +24,12 @@ public class RecipeRemover extends JavaPlugin
         if (getServer().getOnlinePlayers().size() > 0)
         {
             getLogger().warning("Recipes may only be removed on server start, or when no players are present on the server!");
-            getLogger().warning("Attempting to remove recipes while players are on the server will break all online player's session data, preventing them from being saved.");
+            getLogger().warning("Attempting to remove recipes while players are on the server will break all online players' session data, preventing them from being saved.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        
+        getConfig().addDefault("debug", false);
         List<String> defaultMaterials = new ArrayList<>();
         defaultMaterials.add("HOPPER");
         getConfig().addDefault("vanillaResultsToRemove", defaultMaterials);
@@ -58,16 +60,31 @@ public class RecipeRemover extends JavaPlugin
             if (resultsToRemove.contains(recipe.getResult().getType()))
             {
                 getLogger().info("Removed a vanilla recipe for " + recipe.getResult().getType().name());
+                debug("Recipe type: " + recipe.getClass().getName());
                 count++;
             }
             else
+            {
+                debug("Adding vanilla recipe for " + recipe.getResult().getType().name() +
+                        ". Recipe Type: " + recipe.getResult().getClass().getName());
                 recipesToKeep.add(recipe);
+            }
         }
 
         if (recipesToKeep.isEmpty())
             return;
 
+        //clear recipes
         getServer().clearRecipes();
+
+        //for debugging: doublecheck if recipes iterator is empty, and if not, report remaining recipes
+        recipeIterator = getServer().recipeIterator();
+        while (recipeIterator.hasNext())
+        {
+            Recipe recipe = recipeIterator.next();
+            debug("Recipe for " + recipe.getResult().getType().name()
+                    + " was not removed (Craftbukkit didn't clear it). Recipe Type: " + recipe.getResult().getClass().getName());
+        }
 
         for (Recipe recipe : recipesToKeep)
         {
@@ -75,10 +92,18 @@ public class RecipeRemover extends JavaPlugin
             {
                 getServer().addRecipe(recipe);
             }
-            catch (IllegalStateException ignored){} //vanilla recipe
+            catch (IllegalStateException e) //vanilla recipe
+            {
+                debug("Could not re-add recipe for " + recipe.getResult().getType().name() + " because " + e.getMessage());
+            }
         }
 
         getLogger().info("Removed " + count + " recipes.");
-        return;
+    }
+
+    public void debug(String message)
+    {
+        if (getConfig().getBoolean("debug"))
+            getLogger().info(message);
     }
 }
