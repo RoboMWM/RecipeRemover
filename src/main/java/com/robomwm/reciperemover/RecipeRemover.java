@@ -45,6 +45,9 @@ public class RecipeRemover extends JavaPlugin
             Material material = Material.matchMaterial(materialString);
             if (material != null && material != Material.AIR) //Removing AIR has weird effects, not even sure why some recipes have an AIR result. https://www.spigotmc.org/threads/reciperemover.311136/#post-2947932
                 resultsToRemove.add(material);
+            else
+                getLogger().warning("Material " + materialString + " is not a Bukkit Material enum. List of enum constants: " +
+                        "https://destroystokyo.com/javadocs/org/bukkit/Material.html");
         }
 
         int count = 0;
