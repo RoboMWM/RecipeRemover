@@ -28,7 +28,7 @@ public class RecipeRemover extends JavaPlugin
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        
+
         getConfig().addDefault("debug", false);
         List<String> defaultMaterials = new ArrayList<>();
         defaultMaterials.add("HOPPER");
@@ -44,7 +44,7 @@ public class RecipeRemover extends JavaPlugin
         for (String materialString : getConfig().getStringList("vanillaResultsToRemove"))
         {
             Material material = Material.matchMaterial(materialString);
-            if (material != null)
+            if (material != null && material != Material.AIR) //Removing AIR has weird effects, not even sure why some recipes have an AIR result. https://www.spigotmc.org/threads/reciperemover.311136/#post-2947932
                 resultsToRemove.add(material);
         }
 
