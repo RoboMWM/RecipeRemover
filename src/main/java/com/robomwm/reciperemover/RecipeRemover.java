@@ -68,7 +68,7 @@ public class RecipeRemover extends JavaPlugin
             else
             {
                 debug("Adding vanilla recipe for " + recipe.getResult().getType().name() +
-                        ". Recipe Type: " + recipe.getResult().getClass().getName());
+                        ". Recipe Type: " + recipe.getClass().getName());
                 recipesToKeep.add(recipe);
             }
         }
